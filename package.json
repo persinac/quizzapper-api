@@ -9,7 +9,7 @@
     "build-ts": "tsc",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "start-local": "set NODE_ENV=dev&& set DB_USER=devuser&& set DB_PASSWORD=testing123!&& set DB_HOST=127.0.0.1&& set DB_NAME=quiz_app&& node .",
-    "start": "npm run start-dev",
+    "start": "node .",
     "build": "npm run prebuild && npm run build-ts",
     "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
