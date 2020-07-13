@@ -19,6 +19,7 @@
 ### Docker
 1. `docker-compose -f .\db.yml up -d`
 2. `docker-compose -f .\development.yml up -d`
+2. `docker-compose -f production.yml up -d`
 
 ## Config
 

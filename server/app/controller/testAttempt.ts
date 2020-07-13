@@ -47,6 +47,7 @@ class TestAttemptController {
     private createTestAttempt = async (request: Request, response: Response) => {
         let iResponse: ICreateTestResponse = {};
         const data: TestAttempt = request.body;
+        console.log(request.body);
         const newTest = this.testAttemptRepository.create(data);
         const result: TestAttempt = await this.testAttemptRepository.save(newTest);
         iResponse.testAttempt = result;
