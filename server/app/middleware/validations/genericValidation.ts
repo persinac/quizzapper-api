@@ -5,6 +5,7 @@ import HttpException from "../../exceptions/HttpException";
 
 function genericValidation<T>(type: any, skipMissingProperties = false): RequestHandler {
     return (req, res, next) => {
+        console.log(req.body);
         validate(plainToClass(type, req.body), { skipMissingProperties })
             .then((errors: ValidationError[]) => {
                 if (errors.length > 0) {
