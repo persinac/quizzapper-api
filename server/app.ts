@@ -16,7 +16,9 @@ const corsOptions: CorsOptions = {
         // tslint:disable-next-line:no-null-keyword
         callback(null, isWhitelisted);
     },
-    credentials: true
+    credentials: true,
+    allowedHeaders: ["Origin, Content-Type, X-Auth-Token"],
+    methods: ["HEAD, GET, POST, PUT"]
 };
 
 class App {
