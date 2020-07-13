@@ -42,8 +42,8 @@ export class Question {
     // tslint:disable-next-line:no-null-keyword
     @Column({ default: null, nullable: true })
     @IsString()
-    @ValidateIf((o) => o.softwareVersion !== undefined)
-    public softwareVersion: string;
+    @ValidateIf((o) => o.softwareVersion !== undefined && o.softwareVersion !== null)
+    public softwareVersion?: string;
 
     // tslint:disable-next-line:no-null-keyword
     @Column({ default: null, nullable: true })

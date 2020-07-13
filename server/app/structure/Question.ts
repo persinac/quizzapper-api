@@ -8,7 +8,7 @@ interface IQuestion {
     correctAnswer: string;
     answers: string;
     difficulty: string;
-    softwareVersion: string;
+    softwareVersion?: string;
     documentation: string;
     helperTextOne: string;
     helperTextTwo: string;

@@ -4,9 +4,11 @@ import cors, { CorsOptions } from "cors";
 
 const originsWhitelist = [
     "http://localhost:3000",      // this is my front-end url for development
-    "http://f884f9ec059b.ngrok.io",      // this is my front-end url for development
+    "http://localhost:45762",      // this is my front-end url for development
     "http://www.quizzapper.com",
+    "http://quizzapper.com",
     "https://www.quizzapper.com",
+    "https://quizzapper.com",
 ];
 const corsOptions: CorsOptions = {
     origin: function(origin, callback) {
