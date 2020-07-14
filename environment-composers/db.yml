@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   db:
@@ -19,6 +19,8 @@ services:
 
 volumes:
   mysqldata1:
-    external: true
-    name:
-      dbdata2
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/mysql-volume/mysqldata
