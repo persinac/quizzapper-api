@@ -15,7 +15,10 @@ services:
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
     volumes:
-      - "dbdata:/var/lib/mysql"
+      - "mysqldata1:/var/lib/mysql"
 
 volumes:
-  dbdata:
+  mysqldata1:
+    external: true
+    name:
+      dbdata2
