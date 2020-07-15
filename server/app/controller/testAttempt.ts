@@ -9,25 +9,43 @@ import TestResponseController from "./testResponse";
 import ICreateTestResponse from "../structure/IOrderResponse";
 import { TestSummary } from "../entities/TestSummary";
 import TestSummaryController from "./testSummary";
+import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
 
 class TestAttemptController {
     public path = "/test-attempt";
     public router = Router();
     private testAttemptRepository = getRepository(TestAttempt);
 
+    private readonly DEFAULT_PAGING: IPagination;
+    private readonly DEFAULT_SORT: ISort;
+
     constructor() {
         this.initializeRoutes();
+        this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
+        this.DEFAULT_SORT = {sortBy: "testAttemptID", ascDesc: "ASC"};
     }
 
     public initializeRoutes() {
-        this.router.get(this.path, this.getAllTestAttempts);
         this.router.get(`${this.path}/:id`, this.getTestAttemptById);
-        this.router.post(this.path, genericValidation(TestAttempt), this.createTestAttempt);
+        this.router.post(this.path, this.getAllTestAttempts);
+        this.router.post(`${this.path}/new`, genericValidation(TestAttempt), this.createTestAttempt);
         this.router.post(`${this.path}/submit`, this.saveTestAttempt);
     }
 
     private getAllTestAttempts = (request: Request, response: Response) => {
-        this.testAttemptRepository.find()
+        const body = request.body;
+        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
+        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+
+        this.testAttemptRepository
+            .createQueryBuilder("ta")
+            .orderBy({
+                    [`ta.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
+                }
+            )
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
+            .getMany()
             .then((testAttempts: TestAttempt[]) => {
                 response.send(testAttempts);
             });
@@ -65,7 +83,7 @@ class TestAttemptController {
         const tr: TestResponseController = new TestResponseController();
         iResponse = await tr.saveTestResponsesTestAttempt(testResponseData, iResponse);
         const ts: TestSummaryController = new TestSummaryController();
-        ts.createTestSummary(iResponse.testAttempt, iResponse.testResponse);
+        await ts.createTestSummary(iResponse.testAttempt, iResponse.testResponse);
         response.send(iResponse);
     };
 }

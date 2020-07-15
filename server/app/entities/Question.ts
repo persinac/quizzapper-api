@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { IsNumber, IsString, ValidateIf } from "class-validator";
 import { TestResponse } from "./TestResponse";
 
@@ -7,7 +7,7 @@ export class Question {
     @PrimaryGeneratedColumn()
     public questionID?: number;
 
-    @Column()
+    @Column("varchar", {length: "1000"})
     @IsString()
     public question: string;
 
@@ -27,11 +27,11 @@ export class Question {
     @IsString()
     public subCategory: string;
 
-    @Column()
+    @Column("varchar", {length: "1000"})
     @IsString()
     public correctAnswer: string;
 
-    @Column()
+    @Column("varchar", {length: "1000"})
     @IsString()
     public answers: string;
 
@@ -52,13 +52,13 @@ export class Question {
     public documentation: string;
 
     // tslint:disable-next-line:no-null-keyword
-    @Column({ default: null, nullable: true })
+    @Column("varchar", { length: "1000", default: null, nullable: true })
     @IsString()
     @ValidateIf((o) => o.helperTextOne !== undefined)
     public helperTextOne: string;
 
     // tslint:disable-next-line:no-null-keyword
-    @Column({ default: null, nullable: true })
+    @Column("varchar", { length: "1000", default: null, nullable: true })
     @IsString()
     @ValidateIf((o) => o.helperTextTwo !== undefined)
     public helperTextTwo: string;
@@ -77,6 +77,7 @@ export class Question {
 
     // tslint:disable-next-line:no-null-keyword
     @Column({ default: null, nullable: true })
+    @UpdateDateColumn()
     public modifiedDatetime: Date;
 
     @Column()

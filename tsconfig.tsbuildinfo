@@ -1747,7 +1747,7 @@
         "affectsGlobalScope": false
       },
       "./server/ormconfig.ts": {
-        "version": "ff0e451252dbd063dc12cb3f75caefc172b5eb767c8bd0721f2897d03ce91e57",
+        "version": "913ba732397930acbc204b564b544bd5817d9844fd0f941a2f412b425dd55ce2",
         "signature": "1ef51c28969189a7f3d57458d05a70013325e014d4bec0f0322aeb59f1751096",
         "affectsGlobalScope": false
       },
@@ -2377,7 +2377,7 @@
         "affectsGlobalScope": false
       },
       "./server/app/entities/question.ts": {
-        "version": "aab5b3191d80cf014dbcaf9970f6010d5643faa2076e3513037355d721664290",
+        "version": "7909515463acba4f50faa7794f258cb6d41a1494c26759c9b2badd2b05736afb",
         "signature": "2f91fcc32eab872240978cfe1bbc18c02dbc7f88e68ad5cde7c20d83c03e3c16",
         "affectsGlobalScope": false
       },
@@ -2427,7 +2427,7 @@
         "affectsGlobalScope": false
       },
       "./server/app/middleware/validations/genericvalidation.ts": {
-        "version": "970f7994bc4a5ef2a656d1e13cce2d9e9cd77fbe47e94d9cefde37495f3a8fb7",
+        "version": "b46be7f1b1047d2076ebae07e8ecd15f7aff5e729a1b4d5063e656484346e0de",
         "signature": "70a10755acd6c2e21f66cb462b12551196dc16cd826fdea5bdab2308968772cb",
         "affectsGlobalScope": false
       },
@@ -2451,9 +2451,14 @@
         "signature": "f469380647ef73354f2227ef6abb63448b7cdea2dec8112d536fa0a329098399",
         "affectsGlobalScope": false
       },
+      "./server/app/structure/queryparams/iqueryparams.ts": {
+        "version": "b659e380951e97019095916b81a02226a17ef19f1ab1ebecfe312404138ddfd8",
+        "signature": "00ed728c783943de4868fbe55db989f409ace08a8aae818fef334837a309f75d",
+        "affectsGlobalScope": false
+      },
       "./server/app/controller/questions.ts": {
-        "version": "89b61f8559d0d486b225904939a65b46e473a2280c07dad24d75d44777dc1ffd",
-        "signature": "a319d42a160a0a516fba3ed4da64758e1d8ebdcf41f49fb4fea44f594cbb5105",
+        "version": "43d8ddc87c59ebec4e0416f950640f5ed98b79cb9246eee1d9c760fb594ed1a9",
+        "signature": "277c31a896056bcc4c5a4c2de738e59246cce98ea6839f91d4ddfd0dbbbdab1e",
         "affectsGlobalScope": false
       },
       "./server/app/entities/category.ts": {
@@ -2497,8 +2502,8 @@
         "affectsGlobalScope": false
       },
       "./server/app/controller/testresponse.ts": {
-        "version": "ff8598322270a6aecc72790e04d3459dc0dbea6338b6e068fce2feec737ce725",
-        "signature": "19bd2c6a40b7181dbe364920a2bd6fbced748cd14fdf175c53a2ad311317c43f",
+        "version": "d1d19da9b6432e7d7f1addc3fc0fbd108bbe5a4b6e29a376549e01758b199af8",
+        "signature": "017d2324f2a28f0126432fd8e7a258acc24957db3ec66de5355a777fe0be591d",
         "affectsGlobalScope": false
       },
       "./server/app/entities/testsummary.ts": {
@@ -2512,13 +2517,13 @@
         "affectsGlobalScope": false
       },
       "./server/app/controller/testsummary.ts": {
-        "version": "18291332974abf6c995c38c2228880b90609bbe43a0a3b33ed06ac2649e49f0c",
-        "signature": "653d5dc67cf84d079f6bf8ec307be0f6d82df29f8a4a2d47d851280bf22aa70b",
+        "version": "f096420e6b49ac26c945021a957a9db7bbc51b4c5d06c598d5ea8c16894443cf",
+        "signature": "5c5bdb3bf00cd92bf5815b0f7071a2a0beffe00cb8c3f880f397ee209fb969b7",
         "affectsGlobalScope": false
       },
       "./server/app/controller/testattempt.ts": {
-        "version": "8233dbfada3133895c398bd1387ae7f5afe4b3f8bf185b9283ea50d7dbf9a878",
-        "signature": "7936dc671a9f65782383686e7b4107c0ca9937398411f770c6a3a9be9a01e552",
+        "version": "4ea4f903aa300bfb2ed1df754c5ff4d75c6952e0a7f6dfbc03c29cbddf99de9f",
+        "signature": "c0832026db14cb64a69f2368ab3ca24f740b3a58201faef5b5ffa9f3aefa3406",
         "affectsGlobalScope": false
       },
       "./server/server.ts": {
@@ -6695,6 +6700,7 @@
         "./server/app/exceptions/question/questionnotfoundexception.ts",
         "./server/app/middleware/validations/genericvalidation.ts",
         "./server/app/structure/iorderresponse.ts",
+        "./server/app/structure/queryparams/iqueryparams.ts",
         "./server/app/structure/question.ts",
         "./server/app/structure/testresponse.ts"
       ],
@@ -6713,7 +6719,8 @@
         "./server/app/exceptions/httpexception.ts",
         "./server/app/exceptions/question/questionnotfoundexception.ts",
         "./server/app/middleware/validations/genericvalidation.ts",
-        "./server/app/structure/iorderresponse.ts"
+        "./server/app/structure/iorderresponse.ts",
+        "./server/app/structure/queryparams/iqueryparams.ts"
       ],
       "./server/app/controller/testresponse.ts": [
         "./node_modules/@types/express/index.d.ts",
@@ -6732,6 +6739,7 @@
         "./server/app/exceptions/testresponse/testresponsenotfoundexception.ts",
         "./server/app/middleware/validations/nonrequestorderdetailvalidation.ts",
         "./server/app/structure/iorderresponse.ts",
+        "./server/app/structure/queryparams/iqueryparams.ts",
         "./server/app/structure/testresponse.ts"
       ],
       "./server/app/controller/testsummary.ts": [
@@ -6749,6 +6757,7 @@
         "./server/app/entities/testsummary.ts",
         "./server/app/exceptions/httpexception.ts",
         "./server/app/exceptions/question/questionnotfoundexception.ts",
+        "./server/app/structure/queryparams/iqueryparams.ts",
         "./server/app/structure/question.ts",
         "./server/app/structure/testresponse.ts"
       ],
@@ -6919,6 +6928,12 @@
         "./server/app/structure/question.ts",
         "./server/app/structure/testattempt.ts",
         "./server/app/structure/testresponse.ts"
+      ],
+      "./server/app/structure/queryparams/iqueryparams.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts"
       ],
       "./server/app/structure/question.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -11599,6 +11614,7 @@
       "./server/app/middleware/validations/nonrequestordernotesvalidation.ts",
       "./server/app/structure/category.ts",
       "./server/app/structure/iorderresponse.ts",
+      "./server/app/structure/queryparams/iqueryparams.ts",
       "./server/app/structure/question.ts",
       "./server/app/structure/symbol.ts",
       "./server/app/structure/testattempt.ts",

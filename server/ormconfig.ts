@@ -6,7 +6,8 @@ const {
     DB_PASSWORD,
     DB_HOST,
     DB_PORT,
-    DB_NAME
+    DB_NAME,
+    ENV_TYPE
 } = process.env;
 
 const ormDBConfig: ConnectionOptions = {
@@ -19,7 +20,7 @@ const ormDBConfig: ConnectionOptions = {
     entities: [
         __dirname + "/app/entities/*{.ts,.js}",
     ],
-    synchronize: true,
+    synchronize: ENV_TYPE === "development",
     logging: true
 };
 
