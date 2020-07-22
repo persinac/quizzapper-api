@@ -13,6 +13,9 @@ import ICreateTestResponse from "../structure/IOrderResponse";
 import QuestionController from "./questions";
 import ITestResponse from "../structure/TestResponse";
 import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { TSMap } from "typescript-map";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class TestResponseController {
     public path = "/test-attempt/:attemptId/response";
@@ -20,12 +23,12 @@ class TestResponseController {
     private testResponseRepository = getRepository(TestResponse);
 
     private readonly DEFAULT_PAGING: IPagination;
-    private readonly DEFAULT_SORT: ISort;
+    private readonly DEFAULT_SORT: ISort[];
 
     constructor() {
         this.initializeRoutes();
         this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
-        this.DEFAULT_SORT = {sortBy: "responseID", ascDesc: "ASC"};
+        this.DEFAULT_SORT = [{sortBy: "responseID", ascDesc: "ASC"}];
     }
 
     public initializeRoutes() {
@@ -47,18 +50,16 @@ class TestResponseController {
 
     private getTestResponsesByTestAttemptId = (request: Request, response: Response, next: NextFunction) => {
         const attemptId = request.params.attemptId;
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+        const { body } = request;
+        const alias: string = "tr";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testResponseRepository
-            .createQueryBuilder("tr")
+            .createQueryBuilder(alias)
             .where({
                 testAttemptID: attemptId
             })
-            .orderBy({
-                    [`tr.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()

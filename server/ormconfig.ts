@@ -1,4 +1,5 @@
 import { ConnectionOptions } from "typeorm";
+import { join } from "path";
 
 // set via docker-compose
 const {
@@ -10,7 +11,7 @@ const {
     ENV_TYPE
 } = process.env;
 
-const ormDBConfig: ConnectionOptions = {
+const config: ConnectionOptions = {
     type: "mysql",
     host: DB_HOST,
     port: Number(DB_PORT) || 3306,
@@ -20,8 +21,12 @@ const ormDBConfig: ConnectionOptions = {
     entities: [
         __dirname + "/app/entities/*{.ts,.js}",
     ],
-    synchronize: ENV_TYPE === "development",
-    logging: true
+    // synchronize: ENV_TYPE === "development",
+    logging: true,
+    migrationsTableName: "custom_migration_table",
+    cli: {
+        migrationsDir: "./migration"
+    }
 };
 
-export default ormDBConfig;
+export = config;

@@ -5,10 +5,11 @@ import QuestionNotFoundException from "../exceptions/question/QuestionNotFoundEx
 import HttpException from "../exceptions/HttpException";
 import genericValidation from "../middleware/validations/genericValidation";
 import { TestAttempt } from "../entities/TestAttempt";
-import ICreateTestResponse from "../structure/IOrderResponse";
-import ITestResponse from "../structure/TestResponse";
+import { TSMap } from "typescript-map";
 import IQuestion from "../structure/Question";
-import { IPagination, ISort, ISortForQuery } from "../structure/QueryParams/IQueryParams";
+import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class QuestionController {
     public path = "/question";
@@ -16,12 +17,12 @@ class QuestionController {
     private questionRepository = getRepository(Question);
 
     private readonly DEFAULT_PAGING: IPagination;
-    private readonly DEFAULT_SORT: ISort;
+    private readonly DEFAULT_SORT: ISort[];
 
     constructor() {
         this.initializeRoutes();
         this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
-        this.DEFAULT_SORT = {sortBy: "questionID", ascDesc: "ASC"};
+        this.DEFAULT_SORT = [{sortBy: "question", ascDesc: "ASC"}, {sortBy: "difficulty", ascDesc: "DESC"}];
     }
 
     public initializeRoutes() {
@@ -32,23 +33,14 @@ class QuestionController {
     }
 
     private getAllQuestions = (request: Request, response: Response) => {
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
-
-        // const TestSort: ISort[] = body.sort !== undefined ? body.sort : this.DEFAULT_SORT;
-        // const sortOrderValue: ISortForQuery[] = TestSort.map((s: ISort) => {
-        //     return {[`q.${s.sortBy}`]: s.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"};
-        // });
-        // console.log(sortOrderValue);
-        // console.log(sortOrderValue.join(","));
+        const { body } = request;
+        const alias: string = "q";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
 
         this.questionRepository
-            .createQueryBuilder("q")
-            .orderBy({
-                    [`q.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .createQueryBuilder(alias)
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()
@@ -69,17 +61,15 @@ class QuestionController {
     };
 
     private getQuestionByTopic = (request: Request, response: Response, next: NextFunction) => {
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+        const { body } = request;
+        const alias: string = "q";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         const t = body.topic;
         this.questionRepository
-            .createQueryBuilder("q")
-            .where(`q.testTopic = :topic`, {topic: t})
-            .orderBy({
-                    [`q.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .createQueryBuilder(alias)
+            .where(`${alias}.testTopic = :topic`, {topic: t})
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()

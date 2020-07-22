@@ -11,6 +11,9 @@ import { TestAttemptDetailView } from "../entities/TestAttemptDetailView";
 import TestResponseController from "./testResponse";
 import IQuestion from "../structure/Question";
 import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { TSMap } from "typescript-map";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class TestSummaryController {
     public path = "/test-summary";
@@ -19,12 +22,12 @@ class TestSummaryController {
     private testSummaryDetailRepository = getRepository(TestAttemptDetailView);
 
     private readonly DEFAULT_PAGING: IPagination;
-    private readonly DEFAULT_SORT: ISort;
+    private readonly DEFAULT_SORT: ISort[];
 
     constructor() {
         this.initializeRoutes();
         this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
-        this.DEFAULT_SORT = {sortBy: "testSummaryID", ascDesc: "ASC"};
+        this.DEFAULT_SORT = [{sortBy: "testSummaryID", ascDesc: "ASC"}];
     }
 
     public initializeRoutes() {
@@ -36,15 +39,13 @@ class TestSummaryController {
     }
 
     private getAllTestSummary = (request: Request, response: Response) => {
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+        const { body } = request;
+        const alias: string = "ts";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testSummaryRepository
-            .createQueryBuilder("ts")
-            .orderBy({
-                    [`ts.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .createQueryBuilder(alias)
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()
@@ -66,16 +67,14 @@ class TestSummaryController {
 
     private getTestSummaryDetailById = (request: Request, response: Response, next: NextFunction) => {
         const id = request.params.id;
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+        const { body } = request;
+        const alias: string = "tsd";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testSummaryDetailRepository
-            .createQueryBuilder("tsd")
-            .where(`tsd.testSummaryID = :taID`, { taID: request.params.id })
-            .orderBy({
-                    [`tsd.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .createQueryBuilder(alias)
+            .where(`${alias}.testSummaryID = :taID`, { taID: request.params.id })
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()
@@ -112,16 +111,14 @@ class TestSummaryController {
     };
 
     private getTestSummaryByUsername = (request: Request, response: Response, next: NextFunction) => {
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+        const { body } = request;
+        const alias: string = "tsu";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testSummaryRepository
-            .createQueryBuilder("ts")
-            .where(`ts.createdBy = :username`, { username: request.body.username })
-            .orderBy({
-                    [`ts.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .createQueryBuilder(alias)
+            .where(`${alias}.createdBy = :username`, { username: request.body.username })
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()

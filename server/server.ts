@@ -2,15 +2,14 @@ import App from "./app";
 import QuestionController from "./app/controller/questions";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import ormDBConfig from "./ormconfig";
 import CategoryController from "./app/controller/categories";
 import TestResponseController from "./app/controller/testResponse";
 import TestAttemptController from "./app/controller/testAttempt";
 import TestSummaryController from "./app/controller/testSummary";
+// @ts-ignore
+import config from "./ormconfig";
 
-
-
-createConnection(ormDBConfig)
+createConnection(config)
     .then((conn) => {
         const app = new App(
             [

@@ -10,6 +10,9 @@ import ICreateTestResponse from "../structure/IOrderResponse";
 import { TestSummary } from "../entities/TestSummary";
 import TestSummaryController from "./testSummary";
 import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { TSMap } from "typescript-map";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class TestAttemptController {
     public path = "/test-attempt";
@@ -17,12 +20,12 @@ class TestAttemptController {
     private testAttemptRepository = getRepository(TestAttempt);
 
     private readonly DEFAULT_PAGING: IPagination;
-    private readonly DEFAULT_SORT: ISort;
+    private readonly DEFAULT_SORT: ISort[];
 
     constructor() {
         this.initializeRoutes();
         this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
-        this.DEFAULT_SORT = {sortBy: "testAttemptID", ascDesc: "ASC"};
+        this.DEFAULT_SORT = [{sortBy: "testAttemptID", ascDesc: "ASC"}];
     }
 
     public initializeRoutes() {
@@ -33,16 +36,14 @@ class TestAttemptController {
     }
 
     private getAllTestAttempts = (request: Request, response: Response) => {
-        const body = request.body;
-        const pagination: IPagination = body.pagination !== undefined ? body.pagination : this.DEFAULT_PAGING;
-        const sort: ISort = body.sort !== undefined ? body.sort[0] : this.DEFAULT_SORT;
+        const { body } = request;
+        const alias: string = "ta";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
 
         this.testAttemptRepository
-            .createQueryBuilder("ta")
-            .orderBy({
-                    [`ta.${sort.sortBy}`]: sort.ascDesc.toUpperCase() === "ASC" ? "ASC" : "DESC"
-                }
-            )
+            .createQueryBuilder(alias)
+            .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
             .getMany()
