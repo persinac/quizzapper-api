@@ -21,7 +21,6 @@ const config: ConnectionOptions = {
     entities: [
         __dirname + "/app/entities/*{.ts,.js}",
     ],
-    // synchronize: ENV_TYPE === "development",
     logging: true,
     migrationsTableName: "custom_migration_table",
     cli: {
