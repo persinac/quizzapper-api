@@ -46,9 +46,12 @@ class TestAttemptController {
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((testAttempts: TestAttempt[]) => {
-                response.send(testAttempts);
+            .getManyAndCount()
+            .then((value) => {
+                response.send({
+                    testAttempts: value[0],
+                    totalCount: value[1]
+                });
             });
     };
 

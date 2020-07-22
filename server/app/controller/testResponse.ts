@@ -34,7 +34,8 @@ class TestResponseController {
     public initializeRoutes() {
         this.router.get(`${this.path}/:id`, this.getTestResponseById);
         this.router.post(`${this.path}`, this.getTestResponsesByTestAttemptId);
-        this.router.post(this.path, this.createTestResponse);
+        this.router.post(`${this.path}/create`, this.createTestResponse);
+        this.router.post(`${this.path}/update`, this.createTestResponse);
     }
 
     private getTestResponseById = (request: Request, response: Response, next: NextFunction) => {
@@ -62,9 +63,12 @@ class TestResponseController {
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((result: TestResponse[]) => {
-                result.length > 0 ? response.send(result) : next(new CannotFindTestResponseWithTestException(attemptId));
+            .getManyAndCount()
+            .then((value) => {
+                value[1] > 0 ? response.send({
+                    testResponse: value[0],
+                    totalCount: value[1]
+                }) : next(new CannotFindTestResponseWithTestException(attemptId));
             })
             .catch((err) => {
                 next(new HttpException(404, err));

@@ -34,8 +34,8 @@ class TestSummaryController {
         this.router.get(`${this.path}/:id`, this.getTestSummaryById);
         this.router.get(`${this.path}/detail/response/:responseId`, this.getTestSummaryResponseAndQuestionByResponseId);
         this.router.post(`${this.path}/detail/:id`, this.getTestSummaryDetailById);
-        this.router.post(this.path, this.getAllTestSummary);
-        this.router.post(this.path, this.getTestSummaryByUsername);
+        this.router.post(`${this.path}/all`, this.getAllTestSummary);
+        this.router.post(`${this.path}/:username`, this.getTestSummaryByUsername);
     }
 
     private getAllTestSummary = (request: Request, response: Response) => {
@@ -48,9 +48,12 @@ class TestSummaryController {
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((testAttempts: TestSummary[]) => {
-                response.send(testAttempts);
+            .getManyAndCount()
+            .then((value) => {
+                response.send({
+                    testSummary: value[0],
+                    totalCount: value[1]
+                });
             });
     };
 
@@ -77,9 +80,12 @@ class TestSummaryController {
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((result: TestAttemptDetailView[]) => {
-                result ? response.send(result) : next(new QuestionNotFoundException(id));
+            .getManyAndCount()
+            .then((value) => {
+                value[1] > 0 ? response.send({
+                    testAttemptDetails: value[0],
+                    totalCount: value[1]
+                }) : next(new QuestionNotFoundException(id));
             })
             .catch((err) => {
                 next(new HttpException(404, err));
@@ -117,13 +123,16 @@ class TestSummaryController {
         const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testSummaryRepository
             .createQueryBuilder(alias)
-            .where(`${alias}.createdBy = :username`, { username: request.body.username })
+            .where(`${alias}.createdBy = :username`, { username: request.params.username })
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((result: TestSummary[]) => {
-                result ? response.send(result) : next(new QuestionNotFoundException(request.body.username));
+            .getManyAndCount()
+            .then((value) => {
+                value[1] > 0 ? response.send({
+                    testSummary: value[0],
+                    totalCount: value[1]
+                }) : next(new QuestionNotFoundException(request.body.username));
             })
             .catch((err) => {
                 next(new HttpException(404, err));

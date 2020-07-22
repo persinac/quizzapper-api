@@ -1,9 +1,10 @@
-import { ViewColumn, ViewEntity } from "typeorm";
+import { ViewColumn, ViewEntity, PrimaryColumn } from "typeorm";
 
 @ViewEntity({
     name: "TestAttemptDetail_View",
     expression: `
-        select ts.testSummaryID, ts.withinTimeLimit, ta.testAttemptID, tr.responseID, tr.response, q.questionID
+        select concat(ts.testSummaryID, '-',ta.testAttemptID,'-',tr.responseID) as id
+        , ts.testSummaryID, ts.withinTimeLimit, ta.testAttemptID, tr.responseID, tr.response, q.questionID
         , q.answers, q.correctAnswer, q.difficulty, q.question
         from test_summary ts
         JOIN test_attempt ta ON ts.testAttemptID = ta.testAttemptID
@@ -12,6 +13,9 @@ import { ViewColumn, ViewEntity } from "typeorm";
     `
 })
 export class TestAttemptDetailView {
+
+    @PrimaryColumn()
+    id: number;
 
     @ViewColumn()
     testSummaryID: number;

@@ -29,7 +29,8 @@ class QuestionController {
         this.router.get(`${this.path}/:id`, this.getQuestionById);
         this.router.post(this.path, this.getAllQuestions);
         this.router.post(`${this.path}/topic`, this.getQuestionByTopic);
-        this.router.post(this.path, genericValidation(Question), this.createQuestion);
+        this.router.post(`${this.path}/create`, genericValidation(Question), this.createQuestion);
+        this.router.post(`${this.path}/update`, genericValidation(Question), this.createQuestion);
     }
 
     private getAllQuestions = (request: Request, response: Response) => {
@@ -43,9 +44,12 @@ class QuestionController {
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((questions: Question[]) => {
-                response.send(questions);
+            .getManyAndCount()
+            .then((value) => {
+                response.send({
+                    questions: value[0],
+                    totalCount: value[1]
+                });
             });
     };
 
@@ -72,9 +76,12 @@ class QuestionController {
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
-            .getMany()
-            .then((result: Question[]) => {
-                result ? response.send(result) : next(new QuestionNotFoundException(t));
+            .getManyAndCount()
+            .then((value) => {
+                value[1] > 0 ? response.send({
+                    questions: value[0],
+                    totalCount: value[1]
+                }) : next(new QuestionNotFoundException(t));
             })
             .catch((err) => {
                 next(new HttpException(404, err));
