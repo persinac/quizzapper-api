@@ -10,6 +10,10 @@ import { Question } from "../entities/Question";
 import { TestAttemptDetailView } from "../entities/TestAttemptDetailView";
 import TestResponseController from "./testResponse";
 import IQuestion from "../structure/Question";
+import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { TSMap } from "typescript-map";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class TestSummaryController {
     public path = "/test-summary";
@@ -17,20 +21,34 @@ class TestSummaryController {
     private testSummaryRepository = getRepository(TestSummary);
     private testSummaryDetailRepository = getRepository(TestAttemptDetailView);
 
+    private readonly DEFAULT_PAGING: IPagination;
+    private readonly DEFAULT_SORT: ISort[];
+
     constructor() {
         this.initializeRoutes();
+        this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
+        this.DEFAULT_SORT = [{sortBy: "testSummaryID", ascDesc: "ASC"}];
     }
 
     public initializeRoutes() {
-        this.router.get(this.path, this.getAllTestSummary);
         this.router.get(`${this.path}/:id`, this.getTestSummaryById);
-        this.router.get(`${this.path}/detail/:id`, this.getTestSummaryDetailById);
         this.router.get(`${this.path}/detail/response/:responseId`, this.getTestSummaryResponseAndQuestionByResponseId);
+        this.router.post(`${this.path}/detail/:id`, this.getTestSummaryDetailById);
+        this.router.post(this.path, this.getAllTestSummary);
         this.router.post(this.path, this.getTestSummaryByUsername);
     }
 
     private getAllTestSummary = (request: Request, response: Response) => {
-        this.testSummaryRepository.find()
+        const { body } = request;
+        const alias: string = "ts";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
+        this.testSummaryRepository
+            .createQueryBuilder(alias)
+            .orderBy(sort.toJSON())
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
+            .getMany()
             .then((testAttempts: TestSummary[]) => {
                 response.send(testAttempts);
             });
@@ -49,9 +67,16 @@ class TestSummaryController {
 
     private getTestSummaryDetailById = (request: Request, response: Response, next: NextFunction) => {
         const id = request.params.id;
+        const { body } = request;
+        const alias: string = "tsd";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testSummaryDetailRepository
-            .createQueryBuilder("ta")
-            .where(`ta.testSummaryID = :taID`, { taID: request.params.id })
+            .createQueryBuilder(alias)
+            .where(`${alias}.testSummaryID = :taID`, { taID: request.params.id })
+            .orderBy(sort.toJSON())
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
             .getMany()
             .then((result: TestAttemptDetailView[]) => {
                 result ? response.send(result) : next(new QuestionNotFoundException(id));
@@ -86,9 +111,16 @@ class TestSummaryController {
     };
 
     private getTestSummaryByUsername = (request: Request, response: Response, next: NextFunction) => {
+        const { body } = request;
+        const alias: string = "tsu";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         this.testSummaryRepository
-            .createQueryBuilder("ts")
-            .where(`ts.createdBy = :username`, { username: request.body.username })
+            .createQueryBuilder(alias)
+            .where(`${alias}.createdBy = :username`, { username: request.body.username })
+            .orderBy(sort.toJSON())
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
             .getMany()
             .then((result: TestSummary[]) => {
                 result ? response.send(result) : next(new QuestionNotFoundException(request.body.username));

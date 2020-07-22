@@ -33,5 +33,8 @@
     "resolveJsonModule": true /* Allows JSON files to be imported. */
   },
   "include": [ "server/**/*.ts" ],
-  "exclude": [ "node_modules/*" ]
+  "exclude": [
+    "node_modules/*",
+    "migration/*"
+  ]
 }

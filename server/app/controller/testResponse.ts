@@ -12,19 +12,28 @@ import { TestAttempt } from "../entities/TestAttempt";
 import ICreateTestResponse from "../structure/IOrderResponse";
 import QuestionController from "./questions";
 import ITestResponse from "../structure/TestResponse";
+import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { TSMap } from "typescript-map";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class TestResponseController {
     public path = "/test-attempt/:attemptId/response";
     public router = Router();
     private testResponseRepository = getRepository(TestResponse);
 
+    private readonly DEFAULT_PAGING: IPagination;
+    private readonly DEFAULT_SORT: ISort[];
+
     constructor() {
         this.initializeRoutes();
+        this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
+        this.DEFAULT_SORT = [{sortBy: "responseID", ascDesc: "ASC"}];
     }
 
     public initializeRoutes() {
         this.router.get(`${this.path}/:id`, this.getTestResponseById);
-        this.router.get(`${this.path}`, this.getTestResponsesByTestAttemptId);
+        this.router.post(`${this.path}`, this.getTestResponsesByTestAttemptId);
         this.router.post(this.path, this.createTestResponse);
     }
 
@@ -41,10 +50,18 @@ class TestResponseController {
 
     private getTestResponsesByTestAttemptId = (request: Request, response: Response, next: NextFunction) => {
         const attemptId = request.params.attemptId;
-        this.testResponseRepository.createQueryBuilder("qr")
+        const { body } = request;
+        const alias: string = "tr";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
+        this.testResponseRepository
+            .createQueryBuilder(alias)
             .where({
                 testAttemptID: attemptId
             })
+            .orderBy(sort.toJSON())
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
             .getMany()
             .then((result: TestResponse[]) => {
                 result.length > 0 ? response.send(result) : next(new CannotFindTestResponseWithTestException(attemptId));

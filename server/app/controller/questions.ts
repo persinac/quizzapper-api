@@ -1,32 +1,49 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { Question } from "../entities/Question";
-import { getRepository } from "typeorm";
+import { getRepository, OrderByCondition } from "typeorm";
 import QuestionNotFoundException from "../exceptions/question/QuestionNotFoundException";
 import HttpException from "../exceptions/HttpException";
 import genericValidation from "../middleware/validations/genericValidation";
 import { TestAttempt } from "../entities/TestAttempt";
-import ICreateTestResponse from "../structure/IOrderResponse";
-import ITestResponse from "../structure/TestResponse";
+import { TSMap } from "typescript-map";
 import IQuestion from "../structure/Question";
+import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
+import { Pagination } from "../middleware/paging/pagination";
+import { Sorting } from "../middleware/sorting/sorting";
 
 class QuestionController {
     public path = "/question";
     public router = Router();
     private questionRepository = getRepository(Question);
 
+    private readonly DEFAULT_PAGING: IPagination;
+    private readonly DEFAULT_SORT: ISort[];
+
     constructor() {
         this.initializeRoutes();
+        this.DEFAULT_PAGING = {startIndex: 0, batchSize: 25};
+        this.DEFAULT_SORT = [{sortBy: "question", ascDesc: "ASC"}, {sortBy: "difficulty", ascDesc: "DESC"}];
     }
 
     public initializeRoutes() {
-        this.router.get(this.path, this.getAllQuestions);
         this.router.get(`${this.path}/:id`, this.getQuestionById);
+        this.router.post(this.path, this.getAllQuestions);
         this.router.post(`${this.path}/topic`, this.getQuestionByTopic);
         this.router.post(this.path, genericValidation(Question), this.createQuestion);
     }
 
     private getAllQuestions = (request: Request, response: Response) => {
-        this.questionRepository.find()
+        const { body } = request;
+        const alias: string = "q";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
+
+        this.questionRepository
+            .createQueryBuilder(alias)
+            .orderBy(sort.toJSON())
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
+            .getMany()
             .then((questions: Question[]) => {
                 response.send(questions);
             });
@@ -44,10 +61,17 @@ class QuestionController {
     };
 
     private getQuestionByTopic = (request: Request, response: Response, next: NextFunction) => {
-        const t = request.body.topic;
+        const { body } = request;
+        const alias: string = "q";
+        const pagination: IPagination = Pagination.getPaginationForQuery(body);
+        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
+        const t = body.topic;
         this.questionRepository
-            .createQueryBuilder("q")
-            .where(`q.testTopic = :topic`, {topic: t})
+            .createQueryBuilder(alias)
+            .where(`${alias}.testTopic = :topic`, {topic: t})
+            .orderBy(sort.toJSON())
+            .take(pagination.batchSize)
+            .skip(pagination.startIndex)
             .getMany()
             .then((result: Question[]) => {
                 result ? response.send(result) : next(new QuestionNotFoundException(t));
