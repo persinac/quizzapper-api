@@ -11,3 +11,9 @@ export interface ISort {
 export interface ISortForQuery {
     [name: string]: string;
 }
+
+export interface IFilterQuery {
+    operator: string;
+    column: string;
+    value: string | number | string[];
+}

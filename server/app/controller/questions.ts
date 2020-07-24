@@ -10,6 +10,7 @@ import IQuestion from "../structure/Question";
 import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
 import { Pagination } from "../middleware/paging/pagination";
 import { Sorting } from "../middleware/sorting/sorting";
+import { QueryFilterParser } from "../middleware/filtering/queryFilterParser";
 
 class QuestionController {
     public path = "/question";
@@ -28,7 +29,6 @@ class QuestionController {
     public initializeRoutes() {
         this.router.get(`${this.path}/:id`, this.getQuestionById);
         this.router.post(this.path, this.getAllQuestions);
-        this.router.post(`${this.path}/topic`, this.getQuestionByTopic);
         this.router.post(`${this.path}/create`, genericValidation(Question), this.createQuestion);
         this.router.post(`${this.path}/update`, genericValidation(Question), this.createQuestion);
     }
@@ -38,9 +38,18 @@ class QuestionController {
         const alias: string = "q";
         const pagination: IPagination = Pagination.getPaginationForQuery(body);
         const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
+        const filters = body.filters;
+        let qRepo = this.questionRepository.createQueryBuilder(alias);
 
-        this.questionRepository
-            .createQueryBuilder(alias)
+        if (filters !== undefined) {
+            qRepo = QueryFilterParser.buildWhereClause(
+                qRepo,
+                filters,
+                alias
+            );
+        }
+
+        qRepo
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
@@ -58,30 +67,6 @@ class QuestionController {
         this.questionRepository.findOne(id)
             .then((result: Question) => {
                 result ? response.send(result) : next(new QuestionNotFoundException(id));
-            })
-            .catch((err) => {
-                next(new HttpException(404, err));
-            });
-    };
-
-    private getQuestionByTopic = (request: Request, response: Response, next: NextFunction) => {
-        const { body } = request;
-        const alias: string = "q";
-        const pagination: IPagination = Pagination.getPaginationForQuery(body);
-        const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
-        const t = body.topic;
-        this.questionRepository
-            .createQueryBuilder(alias)
-            .where(`${alias}.testTopic = :topic`, {topic: t})
-            .orderBy(sort.toJSON())
-            .take(pagination.batchSize)
-            .skip(pagination.startIndex)
-            .getManyAndCount()
-            .then((value) => {
-                value[1] > 0 ? response.send({
-                    questions: value[0],
-                    totalCount: value[1]
-                }) : next(new QuestionNotFoundException(t));
             })
             .catch((err) => {
                 next(new HttpException(404, err));
