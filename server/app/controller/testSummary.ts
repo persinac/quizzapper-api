@@ -14,6 +14,7 @@ import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
 import { Pagination } from "../middleware/paging/pagination";
 import { TSMap } from "typescript-map";
 import { Sorting } from "../middleware/sorting/sorting";
+import { QueryFilterParser } from "../middleware/filtering/queryFilterParser";
 
 class TestSummaryController {
     public path = "/test-summary";
@@ -43,8 +44,18 @@ class TestSummaryController {
         const alias: string = "ts";
         const pagination: IPagination = Pagination.getPaginationForQuery(body);
         const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
-        this.testSummaryRepository
-            .createQueryBuilder(alias)
+        const filters = body.filters;
+        let tsRepo = this.testSummaryRepository.createQueryBuilder(alias);
+
+        if (filters !== undefined) {
+            tsRepo = QueryFilterParser.buildWhereClause(
+                tsRepo,
+                filters,
+                alias
+            );
+        }
+
+        tsRepo
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)

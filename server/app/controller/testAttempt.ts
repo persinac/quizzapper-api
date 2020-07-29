@@ -13,6 +13,7 @@ import { IPagination, ISort } from "../structure/QueryParams/IQueryParams";
 import { Pagination } from "../middleware/paging/pagination";
 import { TSMap } from "typescript-map";
 import { Sorting } from "../middleware/sorting/sorting";
+import { QueryFilterParser } from "../middleware/filtering/queryFilterParser";
 
 class TestAttemptController {
     public path = "/test-attempt";
@@ -40,9 +41,18 @@ class TestAttemptController {
         const alias: string = "ta";
         const pagination: IPagination = Pagination.getPaginationForQuery(body);
         const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
+        const filters = body.filters;
+        let taRepo = this.testAttemptRepository.createQueryBuilder(alias);
 
-        this.testAttemptRepository
-            .createQueryBuilder(alias)
+        if (filters !== undefined) {
+            taRepo = QueryFilterParser.buildWhereClause(
+                taRepo,
+                filters,
+                alias
+            );
+        }
+
+        taRepo
             .orderBy(sort.toJSON())
             .take(pagination.batchSize)
             .skip(pagination.startIndex)
