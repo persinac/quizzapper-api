@@ -15,11 +15,13 @@ import { Pagination } from "../middleware/paging/pagination";
 import { TSMap } from "typescript-map";
 import { Sorting } from "../middleware/sorting/sorting";
 import { QueryFilterParser } from "../middleware/filtering/queryFilterParser";
+import { TestSummaryView } from "../entities/TestSummaryView";
 
 class TestSummaryController {
     public path = "/test-summary";
     public router = Router();
     private testSummaryRepository = getRepository(TestSummary);
+    private testSummaryViewRepository = getRepository(TestSummaryView);
     private testSummaryDetailRepository = getRepository(TestAttemptDetailView);
 
     private readonly DEFAULT_PAGING: IPagination;
@@ -45,7 +47,7 @@ class TestSummaryController {
         const pagination: IPagination = Pagination.getPaginationForQuery(body);
         const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
         const filters = body.filters;
-        let tsRepo = this.testSummaryRepository.createQueryBuilder(alias);
+        let tsRepo = this.testSummaryViewRepository.createQueryBuilder(alias);
 
         if (filters !== undefined) {
             tsRepo = QueryFilterParser.buildWhereClause(
@@ -132,7 +134,7 @@ class TestSummaryController {
         const alias: string = "tsu";
         const pagination: IPagination = Pagination.getPaginationForQuery(body);
         const sort: TSMap<string, ("ASC" | "DESC")> = Sorting.getSortingForQuery(body, alias, this.DEFAULT_SORT);
-        this.testSummaryRepository
+        this.testSummaryViewRepository
             .createQueryBuilder(alias)
             .where(`${alias}.createdBy = :username`, { username: request.params.username })
             .orderBy(sort.toJSON())
