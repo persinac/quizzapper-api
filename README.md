@@ -35,6 +35,14 @@
     8. `DB_PORT=3306`
     9. `DB_NAME=quizapp`
 
+## Migrations
+For typeorm to perform the migration to a docker instance, the only way I've gotten it to work
+is to have a separate ormMigrationConfig.json file for production, open a tunnel to the docker instance
+and run the migration from my local machine. 
+
+1. Copy your production config into ormMigrationConfig.json (store the dev config somewhere else)
+2. Run: `npm run typeorm -- migration:run`
+
 ## Resources
 
 ### Docker
