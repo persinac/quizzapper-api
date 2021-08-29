@@ -8,7 +8,7 @@
   "scripts": {
     "build-ts": "tsc",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "start-local": "set NODE_ENV=dev&& set DB_USER=devuser&& set DB_PASSWORD=testing123!&& set DB_HOST=127.0.0.1&& set DB_NAME=quiz_app&& set ENV_TYPE=development&& node .",
+    "start-local": "ts-node ./server/server.ts",
     "start-local-ts": "set NODE_ENV=dev&& set DB_USER=devuser&& set DB_PASSWORD=testing123!&& set DB_HOST=127.0.0.1&& set DB_NAME=quiz_app&& set ENV_TYPE=development&& ts-node server/server.ts",
     "start": "node .",
     "build": "npm run prebuild && npm run build-ts",
@@ -38,7 +38,8 @@
     "ts-node": "^8.10.2",
     "typeorm": "^0.2.25",
     "typescript": "^3.9.5",
-    "typescript-map": "latest"
+    "typescript-map": "latest",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {
     "tslint": "^6.1.2"
