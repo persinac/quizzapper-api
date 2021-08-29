@@ -2377,7 +2377,7 @@
         "affectsGlobalScope": false
       },
       "./server/app/entities/question.ts": {
-        "version": "644f27076e2816b4c7f4d86a2c74e40c91bc9acd6a0f5e4a510fdb8167b3a208",
+        "version": "7909515463acba4f50faa7794f258cb6d41a1494c26759c9b2badd2b05736afb",
         "signature": "2f91fcc32eab872240978cfe1bbc18c02dbc7f88e68ad5cde7c20d83c03e3c16",
         "affectsGlobalScope": false
       },
@@ -2442,23 +2442,28 @@
         "affectsGlobalScope": false
       },
       "./server/app/structure/queryparams/iqueryparams.ts": {
-        "version": "b659e380951e97019095916b81a02226a17ef19f1ab1ebecfe312404138ddfd8",
-        "signature": "00ed728c783943de4868fbe55db989f409ace08a8aae818fef334837a309f75d",
+        "version": "e0b9c95432ffd01bbb3c6cdb84cbd863fdd0c8f1726bba95a509e43d6887265e",
+        "signature": "d0177d87501c433969b5b8310ffe9375b1117d6c9722a55f0ab12ec03b56b98f",
         "affectsGlobalScope": false
       },
       "./server/app/middleware/paging/pagination.ts": {
-        "version": "be1c39c1fec21f460d3a2c282547cbdff592ba5d74f792be291d675f60149756",
+        "version": "2a22cd1bb2e300bf133ea510f031eee824c5f97cf84b8fdd29e7923a2a345a2f",
         "signature": "c5b18f8b905cacb9b21446235923255e52c50d87ff934b7cc4df50f517406508",
         "affectsGlobalScope": false
       },
       "./server/app/middleware/sorting/sorting.ts": {
-        "version": "4edd6e8d522ba349e8bd94fb91bb006fc9b9fbf39793bf27f07fc14e1ec2dc24",
+        "version": "496870ad797ee20856584e7b6db34686d88b28f49a859ee3029694c0ec26920a",
         "signature": "f0199981264903bc6c63044640bf8b9624efb831411d70ef157b5816bac2b5a1",
         "affectsGlobalScope": false
       },
+      "./server/app/middleware/filtering/queryfilterparser.ts": {
+        "version": "068d0c6e572c94508fb2dea52a629a260c4abae5cd9a705d93f80e583bcfc014",
+        "signature": "8220506cc0a165b9b34157ce52f875aca338fc4fd9793457b7e47a817727d7ff",
+        "affectsGlobalScope": false
+      },
       "./server/app/controller/questions.ts": {
-        "version": "9eeaca66bf09304b65f3c132d8ff7c88eed120c899e4a42dd527503f14f669e0",
-        "signature": "277c31a896056bcc4c5a4c2de738e59246cce98ea6839f91d4ddfd0dbbbdab1e",
+        "version": "7957b2af712a4943728cac0ec2061399efb7cfbd4bec11f2f8a4d55c22871973",
+        "signature": "78ca446d422f828a278b7cdc70eed63e5aa58d36fa1448a1772b77712f9f5c69",
         "affectsGlobalScope": false
       },
       "./server/app/entities/category.ts": {
@@ -2517,7 +2522,7 @@
         "affectsGlobalScope": false
       },
       "./server/app/controller/testresponse.ts": {
-        "version": "5da6046262a17d566d91963dd7c38c838814d17f523fc2e9647d5e3242535461",
+        "version": "3994f3501d957c9d2eee703b423b552b4605da27f859d0ff838688d9a00f38ec",
         "signature": "017d2324f2a28f0126432fd8e7a258acc24957db3ec66de5355a777fe0be591d",
         "affectsGlobalScope": false
       },
@@ -2527,22 +2532,27 @@
         "affectsGlobalScope": false
       },
       "./server/app/entities/testattemptdetailview.ts": {
-        "version": "330e396f352557f7ab076700fafd3f65515c3c9815f5b80e3fd7b36d8c62888c",
-        "signature": "4706c24d625603a3c7b0a6351149a5cc0e641a679857e841be12c1ac03e93569",
+        "version": "a48498796b590ed853f513b57c0f524dbd713fcd1f40f307cbb4a489f5d60a1e",
+        "signature": "ef9fe916511e87bc2575f180bb01285f710a3d917fb71b0ac0286d2d610cfed8",
+        "affectsGlobalScope": false
+      },
+      "./server/app/entities/testsummaryview.ts": {
+        "version": "d95ab2616a2b2c78d6ec51aba3a2861886baee9d0e693517b9fb214dd453475c",
+        "signature": "4f66d4f51d9640b78e649da14c582d53d496a953d6238bf68f9f6804a2f796e1",
         "affectsGlobalScope": false
       },
       "./server/app/controller/testsummary.ts": {
-        "version": "9f7e318f2e2f61de4733216e64b039746273410b779ac58b99ff1fc81bb90c23",
-        "signature": "5c5bdb3bf00cd92bf5815b0f7071a2a0beffe00cb8c3f880f397ee209fb969b7",
+        "version": "de7f6321ce00b4aaf4bcf61cbd454e966fd3f000edb2f343eba3b37f64d8db7b",
+        "signature": "5a5f6ce2d6aa380b5987586bc1830972b990d7b0e02b11e998853b66fbb4dc07",
         "affectsGlobalScope": false
       },
       "./server/app/controller/testattempt.ts": {
-        "version": "541737b2d31dad996268589972ba85699214063ab7511c52f213f1bae1f79eb4",
+        "version": "92585677547a6a048cb402b9680ac3a95059ae3e6f1c53331f5bb1c9d3165d46",
         "signature": "c0832026db14cb64a69f2368ab3ca24f740b3a58201faef5b5ffa9f3aefa3406",
         "affectsGlobalScope": false
       },
       "./server/server.ts": {
-        "version": "33045ba3eac6c171841dd6e41b1dd5fc1a749d03ec036ea25a448941e0db3161",
+        "version": "39e997578108010b062e215acfae6d0abb59b72740d0c259c5d0c841afe7f34f",
         "signature": "3b3cbe89219f5c7208870ae9336c27c597cc0148fa7858e25ee8561172abbec9",
         "affectsGlobalScope": false
       },
@@ -2579,11 +2589,6 @@
       "./server/app/structure/symbol.ts": {
         "version": "51c6f5797d4ca7f56a4baaae5437acc5f29601f7b8f3e8da99f346829a66f723",
         "signature": "db294091fd33940bce6d1cb11cddba9b9b7a63e90a500d50bc011eeb022e5124",
-        "affectsGlobalScope": false
-      },
-      "./server/config/env_config.ts": {
-        "version": "948bde86cf7cf5fe0989667d18b26550946ad769c4c34f00c08778ada5da186d",
-        "signature": "8149f767e6600386243046769b8af6d64f34d371dd5cbee9771e303d6e48afa7",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/caseless/index.d.ts": {
@@ -6720,6 +6725,7 @@
         "./server/app/entities/testattempt.ts",
         "./server/app/exceptions/httpexception.ts",
         "./server/app/exceptions/question/questionnotfoundexception.ts",
+        "./server/app/middleware/filtering/queryfilterparser.ts",
         "./server/app/middleware/paging/pagination.ts",
         "./server/app/middleware/sorting/sorting.ts",
         "./server/app/middleware/validations/genericvalidation.ts",
@@ -6741,6 +6747,7 @@
         "./server/app/entities/testsummary.ts",
         "./server/app/exceptions/httpexception.ts",
         "./server/app/exceptions/question/questionnotfoundexception.ts",
+        "./server/app/middleware/filtering/queryfilterparser.ts",
         "./server/app/middleware/paging/pagination.ts",
         "./server/app/middleware/sorting/sorting.ts",
         "./server/app/middleware/validations/genericvalidation.ts",
@@ -6784,8 +6791,10 @@
         "./server/app/entities/testattempt.ts",
         "./server/app/entities/testattemptdetailview.ts",
         "./server/app/entities/testsummary.ts",
+        "./server/app/entities/testsummaryview.ts",
         "./server/app/exceptions/httpexception.ts",
         "./server/app/exceptions/question/questionnotfoundexception.ts",
+        "./server/app/middleware/filtering/queryfilterparser.ts",
         "./server/app/middleware/paging/pagination.ts",
         "./server/app/middleware/sorting/sorting.ts",
         "./server/app/structure/queryparams/iqueryparams.ts",
@@ -6842,6 +6851,13 @@
         "./node_modules/class-validator/types/index.d.ts",
         "./node_modules/typeorm/index.d.ts",
         "./server/app/entities/testattempt.ts"
+      ],
+      "./server/app/entities/testsummaryview.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/typeorm/index.d.ts"
       ],
       "./server/app/exceptions/category/cannotcreatecategoryexception.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -6904,6 +6920,14 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./server/app/exceptions/httpexception.ts"
+      ],
+      "./server/app/middleware/filtering/queryfilterparser.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/typeorm/query-builder/selectquerybuilder.d.ts",
+        "./server/app/structure/queryparams/iqueryparams.ts"
       ],
       "./server/app/middleware/objectutilities/orderdetailutility.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -7006,12 +7030,6 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/class-validator/types/index.d.ts",
         "./node_modules/typeorm/index.d.ts"
-      ],
-      "./server/config/env_config.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts",
-        "./node_modules/@types/node/util.d.ts"
       ],
       "./server/ormconfig.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -11132,6 +11150,10 @@
       "./server/app/exceptions/testresponse/testresponsenotfoundexception.ts": [
         "./server/app/exceptions/httpexception.ts"
       ],
+      "./server/app/middleware/filtering/queryfilterparser.ts": [
+        "./node_modules/typeorm/query-builder/selectquerybuilder.d.ts",
+        "./server/app/structure/queryparams/iqueryparams.ts"
+      ],
       "./server/app/middleware/paging/pagination.ts": [
         "./server/app/structure/queryparams/iqueryparams.ts"
       ],
@@ -11659,6 +11681,7 @@
       "./server/app/entities/testattemptdetailview.ts",
       "./server/app/entities/testresponse.ts",
       "./server/app/entities/testsummary.ts",
+      "./server/app/entities/testsummaryview.ts",
       "./server/app/exceptions/category/cannotcreatecategoryexception.ts",
       "./server/app/exceptions/category/categorynotfoundexception.ts",
       "./server/app/exceptions/httpexception.ts",
@@ -11668,6 +11691,7 @@
       "./server/app/exceptions/testresponse/cannotcreatetestresponseexception.ts",
       "./server/app/exceptions/testresponse/cannotfindtestresponsewithtestexception.ts",
       "./server/app/exceptions/testresponse/testresponsenotfoundexception.ts",
+      "./server/app/middleware/filtering/queryfilterparser.ts",
       "./server/app/middleware/objectutilities/orderdetailutility.ts",
       "./server/app/middleware/objectutilities/orderutility.ts",
       "./server/app/middleware/paging/pagination.ts",
@@ -11682,7 +11706,6 @@
       "./server/app/structure/symbol.ts",
       "./server/app/structure/testattempt.ts",
       "./server/app/structure/testresponse.ts",
-      "./server/config/env_config.ts",
       "./server/ormconfig.ts",
       "./server/server.ts"
     ]

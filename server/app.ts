@@ -9,6 +9,7 @@ const originsWhitelist = [
     "http://quizzapper.com",
     "https://www.quizzapper.com",
     "https://quizzapper.com",
+    "https://quizzapper-otnuy.ondigitalocean.app",
 ];
 const corsOptions: CorsOptions = {
     origin: function(origin, callback) {
